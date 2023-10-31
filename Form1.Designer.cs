@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             textBox3 = new TextBox();
@@ -38,7 +37,6 @@
             label3 = new Label();
             label4 = new Label();
             label5 = new Label();
-            pictureBox1 = new PictureBox();
             button1 = new Button();
             label6 = new Label();
             button2 = new Button();
@@ -48,8 +46,9 @@
             textBox4 = new TextBox();
             monthCalendar1 = new MonthCalendar();
             button3 = new Button();
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            pictureBox2 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)form1BindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // textBox1
@@ -121,17 +120,6 @@
             label5.Text = "Inscripción Alumnos";
             label5.Click += label5_Click;
             // 
-            // pictureBox1
-            // 
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(407, 57);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(381, 281);
-            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox1.TabIndex = 9;
-            pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
-            // 
             // button1
             // 
             button1.Location = new Point(298, 382);
@@ -176,7 +164,7 @@
             // 
             comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             comboBox1.DropDownHeight = 130;
-            comboBox1.DropDownWidth = 300;
+            comboBox1.DropDownWidth = 290;
             comboBox1.FormattingEnabled = true;
             comboBox1.IntegralHeight = false;
             comboBox1.Items.AddRange(new object[] { "Desarrollo de Software", "Analista en Medio Ambiente", "Comercio Exterior", "Comercialización y Administración de Empresas", "Higiene y Seguridad en el Trabajo", "Microelectrónica", "Químico Superior Industrial", "Químico Superior Analista", "Sistema de Control" });
@@ -217,6 +205,16 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = Properties.Resources.beppo;
+            pictureBox2.Location = new Point(442, 46);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(303, 292);
+            pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox2.TabIndex = 19;
+            pictureBox2.TabStop = false;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -229,7 +227,6 @@
             Controls.Add(button2);
             Controls.Add(label6);
             Controls.Add(button1);
-            Controls.Add(pictureBox1);
             Controls.Add(label5);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -239,10 +236,11 @@
             Controls.Add(textBox3);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
+            Controls.Add(pictureBox2);
             Name = "Form1";
-            Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            Text = "p";
             ((System.ComponentModel.ISupportInitialize)form1BindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -257,7 +255,6 @@
         private Label label3;
         private Label label4;
         private Label label5;
-        private PictureBox pictureBox1;
         private Button button1;
         private Label label6;
         private Button button2;
@@ -267,5 +264,6 @@
         private TextBox textBox4;
         private MonthCalendar monthCalendar1;
         private Button button3;
+        private PictureBox pictureBox2;
     }
 }

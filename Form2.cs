@@ -18,7 +18,7 @@ namespace TPfinalProgramacion1
 {
     public partial class Form2 : Form
     {
-        string connectionString = "Server=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\USERS\\MAXIM\\DESKTOP\\ESCUELA\\PROGRAMACION 1\\WINDOWSFORM1\\TPFINALPROGRAMACION1\\DATABASE1.mdf;Integrated Security=True;";
+        string connectionString = "Server=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=C:\\Users\\Maxi\\Downloads\\TPfinalProgramacion1\\Database1.mdf;Integrated Security=True;";
 
         public Form2()
         {
@@ -44,7 +44,6 @@ namespace TPfinalProgramacion1
 
                 return dataTable;
             }
-
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -176,79 +175,6 @@ namespace TPfinalProgramacion1
             string filtroExpression = $"apellido LIKE '%{filtro}%'";
 
             // Aplicar el filtro utilizando la función Select del DefaultView del DataTable
-            dt.DefaultView.RowFilter = filtroExpression;
-
-            // Verificar si hay resultados antes de asignar al DataGridView
-            if (dt.DefaultView.Count > 0)
-            {
-                dataGridView1.DataSource = dt.DefaultView.ToTable();
-            }
-            else
-            {
-                // Mostrar un mensaje si no se encontraron resultados
-                MessageBox.Show("No se encontraron resultados que coincidan con el filtro.");
-            }
-        }
-
-        private void textBox2_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                AplicarFiltroFecha();
-                e.Handled = true; // Evita que se procese la tecla "Enter" en el TextBox
-            }
-        }
-        private void AplicarFiltroFecha()
-        {
-            DateTime filtroFecha;
-            // Verificar si el valor ingresado en el TextBox es una fecha válida
-            if (DateTime.TryParse(textBox2.Text, out filtroFecha))
-            {
-                // Obtener la fuente de datos original (por ejemplo, un DataTable)
-                DataTable dt = (DataTable)miBindingSource.DataSource;
-
-                // Aplicar el filtro utilizando LINQ a la columna de tipo DateTime
-                var resultados = from row in dt.AsEnumerable()
-                                 where row.Field<DateTime>("fechanacimiento") == filtroFecha
-                                 select row;
-
-                // Verificar si hay resultados antes de asignar al DataGridView
-                if (resultados.Any())
-                {
-                    dataGridView1.DataSource = resultados.CopyToDataTable();
-                }
-                else
-                {
-                    // Mostrar un mensaje si no se encontraron resultados
-                    MessageBox.Show("No se encontraron resultados para la fecha especificada.");
-                }
-            }
-            else
-            {
-                // Mostrar un mensaje de error si el valor ingresado no es una fecha válida
-                MessageBox.Show("Ingrese una fecha válida en el filtro (formato dd/MM/yyyy).");
-            }
-        }
-
-        private void textBox5_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == (char)Keys.Enter)
-            {
-                AplicarFiltro4();
-                e.Handled = true; // Evita que se procese la tecla "Enter" en el TextBox
-            }
-        }
-        private void AplicarFiltro4()
-        {
-            string filtro = textBox5.Text;
-
-            // Obtener la fuente de datos original (por ejemplo, un DataTable)
-            DataTable dt = (DataTable)miBindingSource.DataSource;
-
-            // Crear una expresión de consulta insensible a mayúsculas/minúsculas
-            string filtroExpression = $"carrera LIKE '%{filtro}%'";
-
-            // Aplicar el filtro con el modificador IgnoreCase
             dt.DefaultView.RowFilter = filtroExpression;
 
             // Verificar si hay resultados antes de asignar al DataGridView
@@ -414,6 +340,57 @@ namespace TPfinalProgramacion1
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Obtener la fuente de datos original (por ejemplo, un DataTable)
+            DataTable dt = (DataTable)miBindingSource.DataSource;
+            // Obtén el valor seleccionado en el ComboBox.
+            string selectedValue = comboBox1.SelectedItem as string;
+
+            // Verifica si se ha seleccionado un valor válido.
+            if (!string.IsNullOrEmpty(selectedValue))
+            {
+                string filtro = selectedValue; // Usar el valor seleccionado, no el índice
+
+                // Crear una expresión de consulta insensible a mayúsculas/minúsculas
+                string filtroExpression = $"carrera = '{filtro}'";
+
+                // Aplicar el filtro al origen de datos del DataGridView
+                (miBindingSource.DataSource as DataTable).DefaultView.RowFilter = filtroExpression;
+
+            }
+            if (selectedValue != null && selectedValue.Equals("Todas", StringComparison.OrdinalIgnoreCase))
+            {
+                // Si no se ha seleccionado un valor válido, muestra todos los datos originales
+                (miBindingSource.DataSource as DataTable).DefaultView.RowFilter = string.Empty;
+            }
+            // Verificar si hay resultados antes de asignar al DataGridView
+            if (dt.DefaultView.Count > 0)
+            {
+                dataGridView1.DataSource = dt.DefaultView.ToTable();
+            }
+            else
+            {
+                // También puedes restablecer la selección a "Todas" si es necesario.
+                comboBox1.SelectedIndex = 0;
+                // Mostrar un mensaje si no se encontraron resultados
+                MessageBox.Show("No se encontraron resultados que coincidan con el filtro.");
+            }
+            // Calcular el ancho máximo de los elementos
+            int maxWidth = 0;
+            foreach (var item in comboBox1.SelectedItem as string)
+            {
+                int itemWidth = TextRenderer.MeasureText(selectedValue.ToString(), comboBox1.Font).Width;
+                if (itemWidth > maxWidth)
+                {
+                    maxWidth = itemWidth;
+                }
+            }
+
+            // Establecer el ancho de la ComboBox al ancho máximo encontrado
+            comboBox1.Width = maxWidth +18;
         }
 
     }

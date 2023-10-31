@@ -35,17 +35,17 @@
             button2 = new Button();
             button3 = new Button();
             textBox1 = new TextBox();
-            textBox2 = new TextBox();
             textBox3 = new TextBox();
             textBox4 = new TextBox();
-            textBox5 = new TextBox();
             button4 = new Button();
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)form1BindingSource).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToOrderColumns = true;
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -99,15 +99,6 @@
             textBox1.TabIndex = 4;
             textBox1.KeyPress += textBox1_KeyPress;
             // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(472, 3);
-            textBox2.Name = "textBox2";
-            textBox2.PlaceholderText = "Filtra por Fecha";
-            textBox2.Size = new Size(124, 23);
-            textBox2.TabIndex = 5;
-            textBox2.KeyPress += textBox2_KeyPress;
-            // 
             // textBox3
             // 
             textBox3.Location = new Point(301, 2);
@@ -127,15 +118,6 @@
             textBox4.TextChanged += textBox4_TextChanged;
             textBox4.KeyPress += textBox4_KeyPress;
             // 
-            // textBox5
-            // 
-            textBox5.Location = new Point(652, 3);
-            textBox5.Name = "textBox5";
-            textBox5.PlaceholderText = "Filtra por Carrera";
-            textBox5.Size = new Size(124, 23);
-            textBox5.TabIndex = 8;
-            textBox5.KeyPress += textBox5_KeyPress;
-            // 
             // button4
             // 
             button4.Location = new Point(162, 427);
@@ -146,16 +128,26 @@
             button4.UseVisualStyleBackColor = true;
             button4.Click += button4_Click;
             // 
+            // comboBox1
+            // 
+            comboBox1.DropDownWidth = 260;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "Todas", "Desarrollo de Software", "Analista en Medio Ambiente", "Comercio Exterior", "Comercialización y Administración de Empresas", "Higiene y Seguridad en el Trabajo", "Microelectrónica", "Químico Superior Industrial", "Químico Superior Analista", "Sistema de Control" });
+            comboBox1.Location = new Point(466, 2);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(121, 23);
+            comboBox1.TabIndex = 10;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            // 
             // Form2
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(comboBox1);
             Controls.Add(button4);
-            Controls.Add(textBox5);
             Controls.Add(textBox4);
             Controls.Add(textBox3);
-            Controls.Add(textBox2);
             Controls.Add(textBox1);
             Controls.Add(button3);
             Controls.Add(button2);
@@ -177,10 +169,9 @@
         private Button button2;
         private Button button3;
         private TextBox textBox1;
-        private TextBox textBox2;
         private TextBox textBox3;
         private TextBox textBox4;
-        private TextBox textBox5;
         private Button button4;
+        private ComboBox comboBox1;
     }
 }
