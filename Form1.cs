@@ -2,12 +2,18 @@ using System.Data.SqlClient;
 using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Data.SqlServerCe;
+using System.IO;
+
 
 namespace TPfinalProgramacion1
 {
+   
     public partial class Form1 : Form
     {
-        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=DATABASE85;Integrated Security=True;";
+ 
+
+        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=DATABASE58;Integrated Security=True;";
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -163,6 +169,11 @@ namespace TPfinalProgramacion1
             textBox4.Text = selectedDate.ToShortDateString();
 
             monthCalendar1.Visible = false;
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

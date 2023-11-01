@@ -18,7 +18,7 @@ namespace TPfinalProgramacion1
 {
     public partial class Form2 : Form
     {
-        string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=DATABASE85;Integrated Security=True;";
+        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=DATABASE58;Integrated Security=True;";
 
         public Form2()
         {

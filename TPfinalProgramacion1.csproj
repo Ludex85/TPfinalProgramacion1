@@ -10,7 +10,8 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.102.1" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
+    <PackageReference Include="FluentMigrator.Runner.SqlServerCe" Version="3.3.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.2" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
   </ItemGroup>

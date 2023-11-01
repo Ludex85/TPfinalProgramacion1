@@ -239,6 +239,7 @@
             Controls.Add(pictureBox2);
             Name = "Form1";
             Text = "p";
+            Load += Form1_Load_1;
             ((System.ComponentModel.ISupportInitialize)form1BindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
