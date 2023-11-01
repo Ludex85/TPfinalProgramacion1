@@ -1,9 +1,8 @@
-using System.Data.SqlClient;
 using System;
 using System.Data;
 using System.Windows.Forms;
-using System.Data.SqlServerCe;
 using System.IO;
+using System.Data.SQLite;
 
 
 namespace TPfinalProgramacion1
@@ -11,13 +10,14 @@ namespace TPfinalProgramacion1
    
     public partial class Form1 : Form
     {
- 
 
-        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=DATABASE58;Integrated Security=True;";
-        private void Form1_Load(object sender, EventArgs e)
-        {
+            private void Form1_Load(object sender, EventArgs e)
+            {
+            AppDomain.CurrentDomain.SetData("DataDirectory", Application.StartupPath);
 
         }
+
+        string connectionString = "Data Source=|DataDirectory|DATABASE58.db;Version=3;";
 
         public Form1()
         {
@@ -39,7 +39,7 @@ namespace TPfinalProgramacion1
 
         }
 
-        public void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
             string nombre, apellido, carrera;
             int dni;
@@ -49,48 +49,38 @@ namespace TPfinalProgramacion1
             carrera = comboBox1.Text;
             DateTime fechanacimiento;
             DateTime fechalimite = new DateTime(2005, 12, 31);
-            using (SqlConnection connection = new SqlConnection(connectionString))
+
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
-                // Abre la conexión a la base de datos.
                 connection.Open();
 
                 // Verifica si el DNI ya existe en la tabla de estudiantes.
-                string query = "SELECT COUNT(*) FROM estudiantes WHERE DNI = @dni";
-                using (SqlCommand command = new SqlCommand(query, connection))
+                string query = "SELECT COUNT(*) FROM Estudiantes WHERE dni = @dni";
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@dni", dni);
-                    int count = (int)command.ExecuteScalar();
-
+                    int count = Convert.ToInt32(command.ExecuteScalar());
 
                     if (count > 0 || !int.TryParse(textBox1.Text, out dni) || dni <= 0 ||
-                   string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) ||
-                   string.IsNullOrWhiteSpace(carrera) || comboBox1.SelectedIndex < 0 ||
-                   !DateTime.TryParse(textBox4.Text, out fechanacimiento) || fechanacimiento > fechalimite)
+                        string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) ||
+                        string.IsNullOrWhiteSpace(carrera) || comboBox1.SelectedIndex < 0 ||
+                        !DateTime.TryParse(textBox4.Text, out fechanacimiento) || fechanacimiento > fechalimite)
                     {
                         MessageBox.Show("Por favor, complete todos los campos correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
                 }
-            }
 
-            // Realiza las acciones necesarias con las variables
-            // ...
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-
+                // Realiza las acciones necesarias con las variables
                 string sqlQuery = "INSERT INTO Estudiantes (dni, nombre, apellido, fechanacimiento, carrera) VALUES (@dni, @nombre, @apellido, @fechanacimiento, @carrera)";
-
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                using (SQLiteCommand command = new SQLiteCommand(sqlQuery, connection))
                 {
                     command.Parameters.AddWithValue("@dni", dni);
                     command.Parameters.AddWithValue("@nombre", nombre);
                     command.Parameters.AddWithValue("@apellido", apellido);
                     command.Parameters.AddWithValue("@fechanacimiento", fechanacimiento);
                     command.Parameters.AddWithValue("@carrera", carrera);
-
                     command.ExecuteNonQuery();
-
                 }
             }
 
@@ -102,6 +92,7 @@ namespace TPfinalProgramacion1
             textBox1.Clear();
             comboBox1.ResetText();
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             Form2 FormularioCarga = new Form2();

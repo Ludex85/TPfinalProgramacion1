@@ -7,23 +7,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Data.SqlClient;
 using System.Net;
 using System.IO;
 using System.Windows.Forms;
 using ClosedXML.Excel;
-
+using System.Data.SQLite;
+using static TPfinalProgramacion1.Form1;
+using TPfinalProgramacion1;
 
 namespace TPfinalProgramacion1
 {
     public partial class Form2 : Form
     {
-        string connectionString = @"Data Source=(LocalDB)\MSSQLLocalDB;Initial Catalog=DATABASE58;Integrated Security=True;";
+        private void Form2_Load(object sender, EventArgs e)
+        {
 
+        }
+    
         public Form2()
         {
             InitializeComponent();
         }
+        // Declaración de variable de cadena para la cadena de conexión
+        string connectionString = "Data Source=|DataDirectory|DATABASE58.db;Version=3;";
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -31,18 +37,20 @@ namespace TPfinalProgramacion1
         }
         private DataTable ObtenerDatosDeBaseDeDatos()
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();
 
                 string query = "SELECT * FROM Estudiantes";
-                SqlCommand command = new SqlCommand(query, connection);
-
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
-
-                return dataTable;
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                {
+                    using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(command))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                        return dataTable;
+                    }
+                }
             }
         }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -51,21 +59,12 @@ namespace TPfinalProgramacion1
         }
         // Crea un BindingSource
         private BindingSource miBindingSource = new BindingSource();
-        private void Form2_Load(object sender, EventArgs e)
-        {
-            CargarDatos();
-        }
+   
         public void CargarDatos()
         {
-            // Configura el DataGridView
-            dataGridView1.AutoGenerateColumns = true; // Esto permite que las columnas se generen automáticamente
-
-            // Configura el BindingSource
-            miBindingSource.DataSource = ObtenerDatosDeBaseDeDatos(); // Llama a una función para cargar datos en el BindingSource
-
-            // Enlaza el DataGridView al BindingSource
+            dataGridView1.AutoGenerateColumns = true;
+            miBindingSource.DataSource = ObtenerDatosDeBaseDeDatos();
             dataGridView1.DataSource = miBindingSource;
-
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -200,21 +199,22 @@ namespace TPfinalProgramacion1
                     // Obtener el índice de la fila seleccionada
                     int rowIndex = dataGridView1.SelectedRows[0].Index;
 
-                    // Obtener el valor de la clave primaria (supongamos que es una columna llamada "ID")
+                    // Obtener el valor de la clave primaria (supongamos que es una columna llamada "dni")
                     int dni;
                     int.TryParse(dataGridView1.Rows[rowIndex].Cells["dni"].Value.ToString(), out dni);
+
                     // Eliminar la fila del DataGridView
                     dataGridView1.Rows.RemoveAt(rowIndex);
 
                     // Actualizar la base de datos eliminando la fila correspondiente
-                    // Esto depende de cómo esté configurada tu base de datos
-                    string query = "DELETE FROM Estudiantes WHERE dni = @dni";
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    using (SqlCommand command = new SqlCommand(query, connection))
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                     {
-                        command.Parameters.AddWithValue("@dni", dni);
                         connection.Open();
-                        command.ExecuteNonQuery();
+                        using (SQLiteCommand command = new SQLiteCommand("DELETE FROM Estudiantes WHERE dni = @dni", connection))
+                        {
+                            command.Parameters.AddWithValue("@dni", dni);
+                            command.ExecuteNonQuery();
+                        }
                     }
                 }
             }
@@ -223,6 +223,7 @@ namespace TPfinalProgramacion1
                 return;
             }
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {
@@ -235,15 +236,31 @@ namespace TPfinalProgramacion1
 
                 try
                 {
-                    // Crear un adaptador de datos (SqlDataAdapter para SQL Server)
-                    using (SqlDataAdapter adapter = new SqlDataAdapter("SELECT * FROM Estudiantes", connectionString))
-                    using (SqlCommandBuilder builder = new SqlCommandBuilder(adapter))
+                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
                     {
-                        // Actualizar la base de datos con las modificaciones del DataTable
-                        adapter.Update(dt);
-                    }
+                        connection.Open();
 
-                    MessageBox.Show("Modificaciones guardadas en la base de datos correctamente.");
+                        // Crear un adaptador de datos (SQLiteDataAdapter)
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter("SELECT * FROM Estudiantes", connection))
+                        using (SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter))
+                        {
+                            // Obtener los cambios pendientes en el DataTable
+                            DataTable changes = dt.GetChanges();
+
+                            if (changes != null)
+                            {
+                                // Actualizar la base de datos con las modificaciones
+                                adapter.Update(changes);
+                                // Aceptar los cambios en el DataTable
+                                dt.AcceptChanges();
+                                MessageBox.Show("Modificaciones guardadas en la base de datos correctamente.");
+                            }
+                            else
+                            {
+                                MessageBox.Show("No hay modificaciones para guardar.");
+                            }
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -255,6 +272,7 @@ namespace TPfinalProgramacion1
                 return;
             }
         }
+
         private void ExportarAExcel()
         {
             using (var workbook = new XLWorkbook())
