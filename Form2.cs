@@ -216,6 +216,8 @@ namespace TPfinalProgramacion1
                             command.ExecuteNonQuery();
                         }
                     }
+                    MessageBox.Show("Eliminación guardada correctamente.");
+
                 }
             }
             else
@@ -332,7 +334,7 @@ namespace TPfinalProgramacion1
                                 adapter.Update(changes);
                                 // Aceptar los cambios en el DataTable
                                 dt.AcceptChanges();
-                                MessageBox.Show("Modificaciones guardadas en la base de datos correctamente.");
+                                MessageBox.Show("Modificaciones guardadas correctamente.");
                             }
                         }
                     }

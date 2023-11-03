@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginForm));
             textBox1 = new TextBox();
             textBox2 = new TextBox();
             label1 = new Label();
@@ -126,6 +127,7 @@
             Controls.Add(textBox2);
             Controls.Add(textBox1);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LoginForm";
             Text = "Form3";
             ResumeLayout(false);

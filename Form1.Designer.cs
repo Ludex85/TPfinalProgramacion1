@@ -164,7 +164,8 @@
             // comboBox1
             // 
             comboBox1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            comboBox1.DropDownHeight = 130;
+            comboBox1.DropDownHeight = 160;
+            comboBox1.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBox1.DropDownWidth = 290;
             comboBox1.FormattingEnabled = true;
             comboBox1.IntegralHeight = false;
