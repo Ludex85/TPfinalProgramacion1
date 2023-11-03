@@ -33,21 +33,24 @@
             label1 = new Label();
             label2 = new Label();
             btnIniciarSesion = new Button();
+            bttonMostrar = new Button();
+            bttonOcultar = new Button();
             SuspendLayout();
             // 
             // textBox1
             // 
             textBox1.Location = new Point(295, 50);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(258, 23);
+            textBox1.Size = new Size(160, 23);
             textBox1.TabIndex = 0;
             // 
             // textBox2
             // 
             textBox2.Location = new Point(295, 134);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(258, 23);
+            textBox2.Size = new Size(160, 23);
             textBox2.TabIndex = 1;
+            textBox2.UseSystemPasswordChar = true;
             // 
             // label1
             // 
@@ -69,24 +72,60 @@
             // 
             // btnIniciarSesion
             // 
-            btnIniciarSesion.Location = new Point(242, 223);
+            btnIniciarSesion.Location = new Point(199, 320);
             btnIniciarSesion.Name = "btnIniciarSesion";
-            btnIniciarSesion.Size = new Size(275, 53);
+            btnIniciarSesion.Size = new Size(354, 41);
             btnIniciarSesion.TabIndex = 4;
             btnIniciarSesion.Text = "Iniciar Sesión";
             btnIniciarSesion.UseVisualStyleBackColor = true;
             btnIniciarSesion.Click += btnIniciarSesion_Click;
             // 
+            // bttonMostrar
+            // 
+            bttonMostrar.FlatAppearance.BorderColor = Color.LightSkyBlue;
+            bttonMostrar.FlatAppearance.BorderSize = 0;
+            bttonMostrar.FlatAppearance.MouseDownBackColor = Color.LightSkyBlue;
+            bttonMostrar.FlatAppearance.MouseOverBackColor = Color.LightSkyBlue;
+            bttonMostrar.FlatStyle = FlatStyle.Flat;
+            bttonMostrar.Location = new Point(297, 162);
+            bttonMostrar.Name = "bttonMostrar";
+            bttonMostrar.Size = new Size(75, 23);
+            bttonMostrar.TabIndex = 5;
+            bttonMostrar.Text = "Mostrar";
+            bttonMostrar.UseVisualStyleBackColor = true;
+            bttonMostrar.Click += bttonMostrar_Click;
+            // 
+            // bttonOcultar
+            // 
+            bttonOcultar.Enabled = false;
+            bttonOcultar.FlatAppearance.BorderColor = Color.LightSkyBlue;
+            bttonOcultar.FlatAppearance.BorderSize = 0;
+            bttonOcultar.FlatAppearance.MouseDownBackColor = Color.LightSkyBlue;
+            bttonOcultar.FlatAppearance.MouseOverBackColor = Color.LightSkyBlue;
+            bttonOcultar.FlatStyle = FlatStyle.Flat;
+            bttonOcultar.Location = new Point(297, 163);
+            bttonOcultar.Name = "bttonOcultar";
+            bttonOcultar.Size = new Size(75, 23);
+            bttonOcultar.TabIndex = 6;
+            bttonOcultar.Text = "Ocultar";
+            bttonOcultar.UseVisualStyleBackColor = true;
+            bttonOcultar.Visible = false;
+            bttonOcultar.Click += bttonOcultar_Click;
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.LightSkyBlue;
             ClientSize = new Size(800, 450);
+            Controls.Add(bttonOcultar);
+            Controls.Add(bttonMostrar);
             Controls.Add(btnIniciarSesion);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(textBox2);
             Controls.Add(textBox1);
+            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "LoginForm";
             Text = "Form3";
             ResumeLayout(false);
@@ -100,5 +139,7 @@
         private Label label1;
         private Label label2;
         private Button btnIniciarSesion;
+        private Button bttonMostrar;
+        private Button bttonOcultar;
     }
 }

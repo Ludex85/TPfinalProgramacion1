@@ -16,6 +16,23 @@ namespace TPfinalProgramacion1
         {
             InitializeComponent();
         }
+        private void bttonOcultar_Click(object sender, EventArgs e)
+        {
+            textBox2.UseSystemPasswordChar = true;
+            bttonOcultar.Visible = false;
+            bttonOcultar.Enabled = false;
+            bttonMostrar.Enabled = true;
+            bttonMostrar.Visible = true;
+        }
+
+        private void bttonMostrar_Click(object sender, EventArgs e)
+        {
+            textBox2.UseSystemPasswordChar = false;
+            bttonMostrar.Visible = false;
+            bttonMostrar.Enabled = false;
+            bttonOcultar.Enabled = true;
+            bttonOcultar.Visible = true;
+        }
 
         private void btnIniciarSesion_Click(object sender, EventArgs e)
         {
@@ -33,6 +50,7 @@ namespace TPfinalProgramacion1
                 MessageBox.Show("Credenciales incorrectas. Inténtalo de nuevo.");
             }
         }
+
 
     }
 }

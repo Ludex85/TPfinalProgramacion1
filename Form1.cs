@@ -7,12 +7,12 @@ using System.Data.SQLite;
 
 namespace TPfinalProgramacion1
 {
-   
+
     public partial class Form1 : Form
     {
 
-            private void Form1_Load(object sender, EventArgs e)
-            {
+        private void Form1_Load(object sender, EventArgs e)
+        {
             AppDomain.CurrentDomain.SetData("DataDirectory", Application.StartupPath);
 
         }
@@ -43,12 +43,12 @@ namespace TPfinalProgramacion1
         {
             string nombre, apellido, carrera;
             int dni;
-            dni = Convert.ToInt32(textBox1.Text);
             nombre = textBox2.Text;
             apellido = textBox3.Text;
             carrera = comboBox1.Text;
             DateTime fechanacimiento;
             DateTime fechalimite = new DateTime(2005, 12, 31);
+            DateTime fechamaxima = new DateTime(1982, 12, 31);
 
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
@@ -58,13 +58,13 @@ namespace TPfinalProgramacion1
                 string query = "SELECT COUNT(*) FROM Estudiantes WHERE dni = @dni";
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@dni", dni);
+                    command.Parameters.AddWithValue("@dni", int.TryParse(textBox1.Text, out dni));
                     int count = Convert.ToInt32(command.ExecuteScalar());
 
                     if (count > 0 || !int.TryParse(textBox1.Text, out dni) || dni <= 0 ||
                         string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) ||
                         string.IsNullOrWhiteSpace(carrera) || comboBox1.SelectedIndex < 0 ||
-                        !DateTime.TryParse(textBox4.Text, out fechanacimiento) || fechanacimiento > fechalimite)
+                        !DateTime.TryParse(textBox4.Text, out fechanacimiento) || fechamaxima > fechanacimiento && fechanacimiento > fechalimite)
                     {
                         MessageBox.Show("Por favor, complete todos los campos correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
@@ -93,26 +93,37 @@ namespace TPfinalProgramacion1
             comboBox1.ResetText();
         }
 
+        private Form2 FormularioCarga;
+
         private void button2_Click(object sender, EventArgs e)
         {
-            Form2 FormularioCarga = new Form2();
+            this.Hide(); // Oculta el formulario actual (Form1)
+            FormularioCarga = new Form2();
+            FormularioCarga.FormClosed += (s, args) =>
+            {
+                this.Show(); // Muestra el formulario actual cuando Form2 se cierra
+            };
             FormularioCarga.Show();
             FormularioCarga.CargarDatos();
         }
 
+
         private void btnAbrirFormularioLogin_Click(object sender, EventArgs e)
         {
+            this.Hide(); // Oculta el formulario actual (Form1)
             using (var loginForm = new LoginForm())
             {
                 if (loginForm.ShowDialog() == DialogResult.OK)
                 {
                     // Las credenciales son válidas, habilita el otro botón
                     button2.Enabled = true;
+                    this.Show(); // Muestra el formulario actual cuando Form3 se cierra
                     MessageBox.Show("Inicio de sesión exitoso");
                     btnAbrirFormularioLogin.Enabled = false;
                 }
                 else
                 {
+                    this.Show(); // Muestra el formulario actual cuando Form3 se cierra
                     MessageBox.Show("Inicio de sesión fallido");
                 }
             }

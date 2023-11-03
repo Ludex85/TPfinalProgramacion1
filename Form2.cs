@@ -23,7 +23,7 @@ namespace TPfinalProgramacion1
         {
 
         }
-    
+
         public Form2()
         {
             InitializeComponent();
@@ -59,7 +59,7 @@ namespace TPfinalProgramacion1
         }
         // Crea un BindingSource
         private BindingSource miBindingSource = new BindingSource();
-   
+
         public void CargarDatos()
         {
             dataGridView1.AutoGenerateColumns = true;
@@ -223,6 +223,18 @@ namespace TPfinalProgramacion1
                 return;
             }
         }
+        HashSet<string> carrerasPermitidas = new HashSet<string>
+{
+    "Desarrollo de Software",
+    "Analista en Medio Ambiente",
+    "Comercio Exterior",
+    "Comercialización y Administración de Empresas",
+    "Higiene y Seguridad en el Trabajo",
+    "Microelectrónica",
+    "Químico Superior Industrial",
+    "Químico Superior Analista",
+    "Sistema de Control"
+};
 
 
         private void button2_Click(object sender, EventArgs e)
@@ -234,20 +246,87 @@ namespace TPfinalProgramacion1
                 // Obtener la fuente de datos original (por ejemplo, un DataTable)
                 DataTable dt = (DataTable)miBindingSource.DataSource;
 
-                try
+                // Obtener los cambios pendientes en el DataTable
+                DataTable changes = dt.GetChanges();
+
+                if (changes != null)
                 {
-                    using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                    // Realizar las verificaciones necesarias en los datos modificados antes de guardarlos en la base de datos
+                    foreach (DataRow row in changes.Rows)
                     {
-                        connection.Open();
-
-                        // Crear un adaptador de datos (SQLiteDataAdapter)
-                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter("SELECT * FROM Estudiantes", connection))
-                        using (SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter))
+                        // Verificar que la columna "nombre" no contenga números
+                        if (row["nombre"] != DBNull.Value && row["nombre"].ToString().Any(char.IsDigit))
                         {
-                            // Obtener los cambios pendientes en el DataTable
-                            DataTable changes = dt.GetChanges();
+                            MessageBox.Show("El campo 'nombre' no debe contener números.");
+                            return; // Cancelar la actualización
+                        }
 
-                            if (changes != null)
+                        // Verificar que la columna "apellido" no contenga números
+                        if (row["apellido"] != DBNull.Value && row["apellido"].ToString().Any(char.IsDigit))
+                        {
+                            MessageBox.Show("El campo 'apellido' no debe contener números.");
+                            return; // Cancelar la actualización
+                        }
+
+                        // Verificar que la columna "carrera" sea uno de los valores permitidos
+                        if (row["carrera"] != DBNull.Value)
+                        {
+                            string carrera = row["carrera"].ToString();
+
+                            if (!carrerasPermitidas.Contains(carrera))
+                            {
+                                MessageBox.Show("El campo 'carrera' debe ser uno de los valores permitidos.");
+                                return; // Cancelar la actualización
+                            }
+                        }
+
+                        // Verificar que el campo "dni" sea un número válido
+                        if (row["dni"] != DBNull.Value)
+                        {
+                            if (!long.TryParse(row["dni"].ToString(), out long dni))
+                            {
+                                MessageBox.Show("El campo 'dni' debe ser un número válido.");
+                                return; // Cancelar la actualización
+                            }
+
+                            // Verificar duplicidad en el campo "dni"
+                            if (dt.AsEnumerable().Count(r => r.Field<long>("dni") == dni) > 1)
+                            {
+                                MessageBox.Show("El campo 'dni' ya existe en la base de datos.");
+                                return; // Cancelar la actualización
+                            }
+                        }
+
+
+                        // Verificar que la columna "fechanacimiento" sea de tipo Date y esté dentro del rango permitido
+                        if (row["fechanacimiento"] != DBNull.Value)
+                        {
+                            if (!DateTime.TryParse(row["fechanacimiento"].ToString(), out DateTime fechaNacimiento))
+                            {
+                                MessageBox.Show("El campo 'fechanacimiento' debe ser una fecha válida.");
+                                return; // Cancelar la actualización
+                            }
+
+                            DateTime fechalimite = new DateTime(2005, 12, 31);
+                            DateTime fechamaxima = new DateTime(1982, 12, 31);
+
+                            if (fechaNacimiento > fechalimite || fechaNacimiento < fechamaxima)
+                            {
+                                MessageBox.Show("El campo 'fechanacimiento' debe estar entre " + fechamaxima.ToString("dd/MM/yyyy") + " y " + fechalimite.ToString("dd/MM/yyyy") + ".");
+                                return; // Cancelar la actualización
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+                        {
+                            connection.Open();
+
+                            // Crear un adaptador de datos (SQLiteDataAdapter)
+                            using (SQLiteDataAdapter adapter = new SQLiteDataAdapter("SELECT * FROM Estudiantes", connection))
+                            using (SQLiteCommandBuilder builder = new SQLiteCommandBuilder(adapter))
                             {
                                 // Actualizar la base de datos con las modificaciones
                                 adapter.Update(changes);
@@ -255,16 +334,16 @@ namespace TPfinalProgramacion1
                                 dt.AcceptChanges();
                                 MessageBox.Show("Modificaciones guardadas en la base de datos correctamente.");
                             }
-                            else
-                            {
-                                MessageBox.Show("No hay modificaciones para guardar.");
-                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error al guardar las modificaciones: " + ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show("Error al guardar las modificaciones: " + ex.Message);
+                    MessageBox.Show("No hay modificaciones para guardar.");
                 }
             }
             else
@@ -408,7 +487,7 @@ namespace TPfinalProgramacion1
             }
 
             // Establecer el ancho de la ComboBox al ancho máximo encontrado
-            comboBox1.Width = maxWidth +18;
+            comboBox1.Width = maxWidth + 18;
         }
 
     }
