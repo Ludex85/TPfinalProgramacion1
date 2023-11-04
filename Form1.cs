@@ -62,8 +62,8 @@ namespace TPfinalProgramacion1
                     int count = Convert.ToInt32(command.ExecuteScalar());
 
                     if (count > 0 || !int.TryParse(textBox1.Text, out dni) || dni <= 0 ||
-                        string.IsNullOrWhiteSpace(nombre) || string.IsNullOrWhiteSpace(apellido) ||
-                        string.IsNullOrWhiteSpace(carrera) || comboBox1.SelectedIndex < 0 ||
+                        string.IsNullOrWhiteSpace(nombre) || (nombre.Any(char.IsDigit)) || string.IsNullOrWhiteSpace(apellido) || (apellido.Any(char.IsDigit))
+                        || string.IsNullOrWhiteSpace(carrera) || comboBox1.SelectedIndex < 0 ||
                         !DateTime.TryParse(textBox4.Text, out fechanacimiento) || (fechanacimiento > fechalimite || fechanacimiento < fechamaxima))
                     {
                         MessageBox.Show("Por favor, complete todos los campos correctamente.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
