@@ -129,7 +129,7 @@
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LoginForm";
-            Text = "Form3";
+            Text = "Log In";
             ResumeLayout(false);
             PerformLayout();
         }
